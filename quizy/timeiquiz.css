@@ -1,0 +1,27 @@
+
+.markertext {
+    background:linear-gradient(transparent 70%, yellow 50%);
+
+}
+
+body {
+  
+    width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  button {
+    width: 600px;
+    height: 50px;
+    text-align: left;
+    font-size: 16px;
+    margin: 5px 2px 3px;
+    color: black;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-bottom-width: 2px;
+    font-family:'HiraKakuProN-W6';
+  }
+
+  
