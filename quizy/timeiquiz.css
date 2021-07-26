@@ -1,22 +1,53 @@
 
-.markertext {
-    background:linear-gradient(transparent 70%, yellow 50%);
+/* "これはなんて読む？"　の下線　 option + command + ↓*/
 
+.title {
+  font-size: 17px;
+  margin: 0;
 }
 
-body {
+.title:after {
+  margin-top: 0px;
+  width: 120px;
+  height: 2px;
+  background-color: #00ab36;
+  content: '';
+}
+
+.underline-box {
+    margin-top: 5px;
+    width: 120px;
+    height: 2px;
+    background-color: #00ab36;
+    content: '';
+}
+
+.quiz-img-container {
+  width: fit-content;
+  margin: 10px auto;
+}
+
+img {
   
-    width: 600px;
-    margin-right: auto;
-    margin-left: auto;
+    width: 620px;
+    height: 372px;
+    text-align: center;
+ 
   }
 
-  button {
-    width: 600px;
-    height: 50px;
+ul {
+  width: 592px;
+  margin: 0px auto;
+  list-style: none;
+}
+
+  li {
+  
+    height: 23px;
     text-align: left;
     font-size: 16px;
-    margin: 3px 2px 3px;
+    margin: 10px 0px;
+    padding: 13px;
     color: black;
     background-color: white;
     border: 1px solid #ddd;
@@ -24,14 +55,16 @@ body {
     font-family:'HiraKakuProN-W6';
     cursor: pointer;
     cursor: hand;
-    padding: 5px;
   }
 
+
+  /* 正解の選択肢の色を青にする */
   .correct-color {
      background-color: #297CFE;
      color: white;
   }
   
+  /* 不正解を選んだときその選択肢を赤にする */
   .incorrect-color  {
     background-color: #FD5129;
     color: white;
@@ -41,7 +74,7 @@ body {
     pointer-events: none;
   }
 
-  #kaitou  {
+  #success  {
     display: none;
     width: 600px;
     height: 80px;
@@ -52,7 +85,7 @@ body {
 
   }
 
-  #kaitou2  {
+  #failure  {
     display: none;
     width: 600px;
     height: 80px;
@@ -64,15 +97,20 @@ body {
   }
 
 
-  #kaitou- {
+  #seikai {
     font-size: 16px;
     font-family:'HiraKakuProN-W6';
     border-bottom: solid 3px #297CFE;
   }
 
 
-  #kaitou2- {
+  #fuseikai {
     font-size: 16px;
     font-family:'HiraKakuProN-W6';
     border-bottom: solid 3px #FD5129;
+  }
+
+  .title {
+    font-size: 16px;
+    font-family:'HiraKakuProN-W6';
   }
