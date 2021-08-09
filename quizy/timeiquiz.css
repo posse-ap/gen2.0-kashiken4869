@@ -1,25 +1,25 @@
 
 /* "これはなんて読む？"　の下線　 option + command + ↓*/
 
+.quiz-div {
+  margin: 10px auto;
+  width: 40%;
+}
+
 .title {
   font-size: 17px;
-  margin: 0;
+  margin: 0 auto;
+  width: 100%;
+  text-align: left;
+  font-family:'HiraKakuProN-W6';
 }
 
 .title:after {
-  margin-top: 0px;
+  display:block;
   width: 120px;
   height: 2px;
   background-color: #00ab36;
   content: '';
-}
-
-.underline-box {
-    margin-top: 5px;
-    width: 120px;
-    height: 2px;
-    background-color: #00ab36;
-    content: '';
 }
 
 .quiz-img-container {
@@ -28,12 +28,10 @@
 }
 
 img {
-  
     width: 620px;
     height: 372px;
     text-align: center;
- 
-  }
+}
 
 ul {
   width: 592px;
@@ -41,76 +39,91 @@ ul {
   list-style: none;
 }
 
-  li {
-  
-    height: 23px;
-    text-align: left;
-    font-size: 16px;
-    margin: 10px 0px;
-    padding: 13px;
-    color: black;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-bottom-width: 2px;
-    font-family:'HiraKakuProN-W6';
-    cursor: pointer;
-    cursor: hand;
-  }
+li {
+  height: 23px;
+  text-align: left;
+  font-size: 16px;
+  margin: 10px 0px;
+  padding: 13px;
+  color: black;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-bottom-width: 2px;
+  font-family:'HiraKakuProN-W6';
+  cursor: pointer;
+  cursor: hand;
+}
 
+/* 回答ボックス */
+.answer-box{
+  background-color: #f5f5f5;
+  width: 558px;
+  padding: 17px;
+  margin: 0 100px 0 180px;
+  border-radius: 3px;
+}
 
-  /* 正解の選択肢の色を青にする */
-  .correct-color {
-     background-color: #297CFE;
-     color: white;
-  }
-  
-  /* 不正解を選んだときその選択肢を赤にする */
-  .incorrect-color  {
-    background-color: #FD5129;
-    color: white;
-  }
+/* 不正解を選んだときその選択肢を赤にする */
+.incorrect-color  {
+  background-color: #FD5129;
+  color: white;
+}
 
-  .oneClick {
-    pointer-events: none;
-  }
+/* 正解の選択肢の色を青にする */
+.correct-color {
+  background-color: #297CFE;
+  color: white;
+}
 
-  #success  {
-    display: none;
-    width: 600px;
-    height: 80px;
-    margin: 3px 2px 3px;
-    background-color: #f5f5f5;
-    padding: 5px;
-    border: 1px solid #ddd;
+.oneClick {
+  pointer-events: none;
+}
 
-  }
+.quiz-result-title{
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+  padding-bottom: 3px;
+  margin-top: 0;
+  margin-bottom: 10px;
+  display: inline-block;
+}
 
-  #failure  {
-    display: none;
-    width: 600px;
-    height: 80px;
-    margin: 3px 2px 3px;
-    background-color: #f5f5f5;
-    padding: 5px;
-    border: 1px solid #ddd;
+.quiz-result-paragraph{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+}
 
-  }
+#success  {
+  display: none;
+  width: 600px;
+  height: 80px;
+  margin: 3px 2px 3px;
+  background-color: #f5f5f5;
+  padding: 5px;
+  border: 1px solid #ddd;
+}
 
+#failure  {
+  display: none;
+  width: 600px;
+  height: 80px;
+  margin: 3px 2px 3px;
+  background-color: #f5f5f5;
+  padding: 5px;
+  border: 1px solid #ddd;
+}
 
-  #seikai {
-    font-size: 16px;
-    font-family:'HiraKakuProN-W6';
-    border-bottom: solid 3px #297CFE;
-  }
+.bingo {
+  font-size: 16px;
+  font-family:'HiraKakuProN-W6';
+  border-bottom: solid 3px #297CFE;
+}
 
-
-  #fuseikai {
-    font-size: 16px;
-    font-family:'HiraKakuProN-W6';
-    border-bottom: solid 3px #FD5129;
-  }
-
-  .title {
-    font-size: 16px;
-    font-family:'HiraKakuProN-W6';
-  }
+.not-bingo {
+  font-size: 16px;
+  font-family:'HiraKakuProN-W6';
+  border-bottom: solid 3px #FD5129;
+}

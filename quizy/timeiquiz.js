@@ -1,11 +1,7 @@
 let quesNum;
-let choiceNum;
-let correct = document.getElementById('choice${i}-0');
-let incorrect1 = document.getElementById('choice${i}-1');
-let incorrect2 = document.getElementById('choice${i}-2');
-let correctNum = 0;
+let choiceNum;　　
 const quizLength = 10;
-
+const optionLength = 3;
 let choice = [
    ['たかなわ', 'たかわ', 'こうわ'], //0
    ['かめいど', 'かめど', 'かめと'], //1
@@ -17,125 +13,85 @@ let choice = [
    ['おかちまち', 'みとちょう', 'ごしろちょう'], //7
    ['ししぼね', 'ろっこつ', 'しこね'], //8
    ['こぐれ', 'こばく', 'こしゃく'], //9
-　　];
+];
 
-
+let answer = [
+   'たかなわ', 'かめいど', 'こうじまち', 'おなりもん', 'とどろき', 'しゃくじい', 'ぞうしき', 'おかちまち', 'ししぼね', 'こぐれ'
+]
 
 for (let i = 0; i < quizLength; i++) {
+   let quizDiv = document.createElement('div');
+   quizDiv.id = `quiz-div${i}`;
+   quizDiv.classList.add("quiz-div");
+   document.body.appendChild(quizDiv);
 
-let quizDiv = document.createElement('div');
-quizDiv.id  = `quiz-div${i}`;
-document.body.appendChild(quizDiv);
+   let quizTitle = document.createElement('h1');
+   quizTitle.innerHTML = `<h1 class="title">${i + 1}. この地名はなんて読む？</h1>`;
+   quizDiv.appendChild(quizTitle);
 
-let quizTitle = document.createElement('h1');
-quizTitle.innerHTML = `<h1 class="title">${i + 1}. この地名はなんて読む？</h1>`;
-//<span class="markertext">${i + 1}.この地名は</span>
-quizDiv.appendChild(quizTitle);
+   let quizImgContainer = document.createElement('div');
+   quizImgContainer.classList.add("quiz-img-container");
+   quizDiv.appendChild(quizImgContainer);
 
-let underlineBox = document.createElement('p');
-underlineBox.classList.add("underline-box");
-quizDiv.appendChild(underlineBox);
+   let timeiImg = document.createElement('img');
+   timeiImg.src = `./img/photo${i}.png`;
+   quizImgContainer.appendChild(timeiImg);
 
-let quizImgContainer = document.createElement('div');
-quizImgContainer.classList.add("quiz-img-container");
-quizDiv.appendChild(quizImgContainer);
-
-let timeiImg = document.createElement('img');
-timeiImg.src = `./img/photo${i}.png`;
-quizImgContainer.appendChild(timeiImg);
-
-let choices = document.createElement('ul');
-choices.id = `quiz-choices${i}`;
-quizDiv.appendChild(choices);
-choices.innerHTML = 
-`<li id="choice${i}-0" >${choice[i][0]}</li>     
- <li id="choice${i}-1" >${choice[i][1]}</li>
- <li id="choice${i}-2" >${choice[i][2]}</li>`;
-
-// <li id="choice${i}-0" onclick="clickfunction(${i},0,correctNum)">${choice[i][0]}</li>     
-//  <li id="choice${i}-1" onclick="clickfunction(${i},1,correctNum)">${choice[i][1]}</li>
-//  <li id="choice${i}-2" onclick="clickfunction(${i},2,correctNum)">${choice[i][2]}</li>
-
-// 回答ボックスの表示//
- let answerBoxDiv = document.createElement('div');
-answerBoxDiv.id  = `answerbox-div${i}`;
-document.body.appendChild(answerBoxDiv);
-
-}
-
-let clickedChoice = document.getElementById(`choice${quesNum}-${choiceNum}`);   //選んだもののli取得
-let correctChoice = document.getElementById(`choice${quesNum}-${correctNum}`);  //答えのli取得
-let answerBoxDiv = document.getElementById(`answerbox-div${quesNum}`);          //回答ボックスのdiv取得
-
-let result = createElement('h3');
-if (correctNum === choiceNum) {
-   result.innerHTML  = `<span class = "seikai"> 正解！ </span>`;
-} else {
-   result.innerHTML = `<span class = "fuseikai"> 不正解！ </span>`;
-}
-document.answerBoxDiv.appendChild(result);
-
-let correctParagraph = createElement('p');
-correctParagraph.innerHTML = `<p> 正解は「${correctChoice.innerText}」です！ </p> `;
-answerBoxDiv.appendChild(correctParagraph);
-
-
-//　正解を選んだとき
-function correctAnswer() {
-      // correct.style.backgroundColor = "#297CFE";
-      // correct.style.color = "#ffffff";
-      correct.classList.add("correct-color")
-      correct.classList.add("oneClick")
-      incorrect1.classList.add("oneClick")
-      incorrect2.classList.add("oneClick")
-      if( success.style.display=="block"){
-         // noneで非表示
-         success.style.display　= "none";
-      } else {
-         //blockで表示
-         success.style.display　= "block";
-      }
+   for (let k = optionLength - 1; k > 0; k--) {
+      const j = Math.floor(Math.random() * (k + 1));
+      [choice[i][j], choice[i][k]] = [choice[i][k], choice[i][j]];
    }
-   correct.addEventListener('click',correctAnswer);
-   
-// 不正解1を選んだとき、正解の選択肢を青色にする
-   function incorrectAnswer1() {
-      correct.style.backgroundColor = "#297CFE";
-      correct.style.color = "#ffffff";
-  // incorrect1.style.backgroundColor = "#FD5129";
-      // incorrect1.style.color = "#FD5129";
-      incorrect1.classList.add("incorrect-color")
-      correct.classList.add("oneClick")
-      incorrect1.classList.add("oneClick")
-      incorrect2.classList.add("oneClick")
-      if( failure.style.display=="block"){
-         // noneで非表示
-         failure.style.display　= "none";
-      } else {
-         //blockで表示
-         failure.style.display　= "block";
-      }
-   }
-  incorrect1.addEventListener('click',incorrectAnswer1);
-  
-// 不正解2を選んだとき,
-
-  function incorrectAnswer2() {
-      correct.style.backgroundColor = "#297CFE";
-      correct.style.color = "#ffffff";
-      // incorrect2.style.backgroundColor = "##FD5129";
-      // incorrect2.style.color = "#ffffff";
-      incorrect2.classList.add("incorrect-color")
-      correct.classList.add("oneClick")
-      incorrect1.classList.add("oneClick")
-      incorrect2.classList.add("oneClick")
-      if( failure.style.display=="block"){
-         // noneで非表示
-         failure.style.display　= "none";
-      } else {
-         //blockで表示
-         failure.style.display　= "block";
-      }
-  }
-  incorrect2.addEventListener('click',incorrectAnswer2);
  
+   let choices = document.createElement('ul');
+   choices.id = `quiz-choices${i}`;
+   quizDiv.appendChild(choices);
+   choices.innerHTML =
+      `<li id="choice${i}-0" onclick="clickfunction(${i},0)">${choice[i][0]}</li>`
+      + `<li id="choice${i}-1" onclick="clickfunction(${i},1)">${choice[i][1]}</li>`
+      + `<li id="choice${i}-2" onclick="clickfunction(${i},2)">${choice[i][2]}</li>`;
+
+   // 回答ボックスの表示//
+   let answerBoxDiv = document.createElement('div');
+   answerBoxDiv.id = `answerbox-div${i}`;
+   document.body.appendChild(answerBoxDiv);
+   answerBoxDiv.disabled = true;
+}
+
+let clickfunction = function (quesNum, choiceNum) {　//クリックすると3つの変数が更新される
+   let correctNum =  choice[quesNum].indexOf(answer[quesNum]);
+   let correctChoice = document.getElementById(`choice${quesNum}-${correctNum}`);  //答えのli取得
+   let clickedChoice = document.getElementById(`choice${quesNum}-${choiceNum}`);   //選んだもののli取得
+   let answerBoxDiv = document.getElementById(`answerbox-div${quesNum}`);          //回答ボックスのdiv取得
+   let result = document.createElement('h3');
+   result.classList.add('quiz-result-title');
+   answerBoxDiv.appendChild(result);
+
+   let resultParagraph = document.createElement('p');
+   //回答済の全ての問題の回答ボックスへの表示を行う
+   let answerBoxChoice = [answerBoxDiv]
+   answerBoxChoice.forEach(answerBoxDiv => {
+      //スタイルの追加
+      answerBoxDiv.classList.add('answer-box');
+      resultParagraph.classList.add('quiz-result-paragraph');
+      //正解を表す文面をpタグに追加
+      resultParagraph.innerHTML = `正解は「${answer[quesNum]}」です！`;
+      //divの子要素として追加することで、実際に表示する
+      //  answerBoxDiv.appendChild(result);
+      answerBoxDiv.appendChild(resultParagraph);
+   });
+
+   clickedChoice.classList.add('incorrect-color'); //クリックしたliを赤くする
+   correctChoice.classList.add('correct-color'); //正解のliを青くする（正解を選んだ場合は上書きされる）
+
+
+   if (choiceNum === correctNum) {
+      result.innerHTML = `<h3 class = "bingo"> 正解！ </span>`;
+   } else {
+      result.innerHTML = `<h3 class = "not-bingo"> 不正解！ </span>`;
+   }
+   for (let i = 0; i < optionLength; i++) {
+      document.getElementById(`choice${quesNum}-${i}`).classList.add('oneClick');
+   };
+}
+
+
