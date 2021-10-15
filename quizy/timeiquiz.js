@@ -10,10 +10,11 @@ let choice = [
    ['おかちまち', 'みとちょう', 'ごしろちょう'], //7
    ['ししぼね', 'ろっこつ', 'しこね'], //8
    ['こぐれ', 'こばく', 'こしゃく'], //9
+   ['こぐれ', 'こばく', 'こしゃく'], //9
 ];
 
 let answer = [
-   'たかなわ', 'かめいど', 'こうじまち', 'おなりもん', 'とどろき', 'しゃくじい', 'ぞうしき', 'おかちまち', 'ししぼね', 'こぐれ'
+   'たかなわ', 'かめいど', 'こうじまち', 'おなりもん', 'とどろき', 'しゃくじい', 'ぞうしき', 'おかちまち', 'ししぼね', 'こぐれ',
 ]
 
 for (let i = 0; i < choice.length; i++) {
@@ -63,7 +64,7 @@ let clickfunction = function (quesNum, choiceNum) {  //クリックすると3つ
    let correctChoice = document.getElementById(`choice${quesNum}-${correctNum}`);  //答えのli取得
    let clickedChoice = document.getElementById(`choice${quesNum}-${choiceNum}`);   //選んだもののli取得
    let answerBoxDiv = document.getElementById(`answerbox-div${quesNum}`);          //回答ボックスのdiv取得
-   
+
    let result = document.createElement('h3');
    result.classList.add('quiz-result-title');
    answerBoxDiv.appendChild(result);
