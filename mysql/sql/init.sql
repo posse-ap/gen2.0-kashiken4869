@@ -35,6 +35,7 @@ CREATE TABLE prefectures(
 ('東京の難読地名クイズ'),
 ('広島県の難読地名クイズ');
 
+
 -- questionsテーブル
 DROP TABLE IF EXISTS questions;
 CREATE TABLE questions (
@@ -61,7 +62,7 @@ image VARCHAR(225) NOT NULL
 );
 
 INSERT INTO choices (prefecture_id, question_id, choice0, choice1, choice2, image) VALUES 
-(1, 1, 'たかなわ', 'こうわ', 'わ', 'takanawa.png'),
+(1, 1, 'たかなわ', 'こうわ', 'わ', 'photo0.png'),
 (1, 2, 'かめいど', 'かめと', 'かめど', 'kameido.png'),
 (1, 3, 'こうじまち', 'かゆまち', 'おかとまち', 'koujimati.png' ),
 (1, 4, 'おなりもん', 'おかどもん', 'ごせいもん', 'onarimon.png'),

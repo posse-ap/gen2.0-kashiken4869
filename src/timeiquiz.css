@@ -2,7 +2,7 @@
 /* "これはなんて読む？"　の下線　 option + command + ↓*/
 
 .quiz-div {
-  margin: 10px auto;
+  /* margin: 10px auto; */
   width: 40%;
   display: flex;
   flex-direction: column;
@@ -26,15 +26,16 @@
   content: '';
 }
 
-.quiz-img-container {
+/* .quiz-img-container {
+  width: 90%;
   width: fit-content;
-  margin: 10px auto;
-}
+  margin: 10px;
+} */
 
-img {
+.quiz-img-container img {
     width: 100%;
-    height: auto;
-    text-align: center;
+    /* height: auto; */
+    /* text-align: center; */
 }
 
 ul {
