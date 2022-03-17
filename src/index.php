@@ -1,36 +1,33 @@
 <?php require($_SERVER['DOCUMENT_ROOT'] . "/db_connect.php");
-// $id = htmlspecialchars($_GET["id"]);
+$id = htmlspecialchars($_GET["id"]);
 // jsを書き込んだとしても、ただの文字として扱ってほしい
 // prefectures
 
 if (!isset($_GET['id'])) {
-  echo "URLにidが指定されていません。";
+  echo "何しとんねん";
   exit;
 }
 
-$prefecture_id = $_GET['id'];
-$prefectures_value =  "SELECT * FROM prefectures WHERE id = $prefecture_id";
-$prefectures = $db->query($prefectures_value)->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_UNIQUE);
+// URLからIDを取得
+$id = $_GET['id'];
 
-echo ($prefectures[$id]["name"]);
 
-// choices
-$choices_value =  "SELECT * FROM choices WHERE prefecture_id = $prefecture_id";
-$choices = $db->query($choices_value)->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_UNIQUE);
+// title表示用
+$title_stmt = $db->prepare("SELECT * FROM prefectures WHERE id = ?");
+$title_stmt->execute(array($id));
+$title = $title_stmt->fetch();
 
-// $odai = [];
-// $questions = $db->query($prefectures_value)->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_UNIQUE);
-// foreach ($questions as $question) {
-//   $questionId = $question['id'];
-//   $choices = $db->query($choices_value)->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_UNIQUE);
-//   $question['choices'] = $choices;
-// }
-// $odai = $questions;
+// $prefecture_id = $_GET['id'];
+// $prefectures_value =  "SELECT * FROM prefectures WHERE id = $prefecture_id";
+// $prefectures = $db->query($prefectures_value)->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_UNIQUE);
 
-// 恐らく$correctsの配列は不要。$choicesを使って実装が可能だと思います
-$choices_corrects =  "SELECT choice0 FROM choices WHERE prefecture_id = $prefecture_id";
-$corrects = $db->query($choices_corrects)->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_UNIQUE);
-print_r($corrects);
+echo ($title["name"]);
+
+// title表示用
+$options_stmt = $db->prepare("SELECT * FROM choices WHERE prefecture_id = ?");
+$options_stmt->execute(array($id));
+$options = $options_stmt->fetchAll();
+
 
 ?>
 <!DOCTYPE html>
@@ -46,47 +43,47 @@ print_r($corrects);
 
 <body>
   <div class="question">
-  
-  
+
+
     <?php
-    foreach ($choices as $choice) : ?>
+    foreach ($options as $option) :
+    ?>
+
+      <?php //phpのシャッフル、１・２・３がシャッフルされる
+      $shuffle_num = [0, 1, 2];
+      shuffle($shuffle_num);
+      ?>
+
+
+
       <h1 class="title">
- 
+
+        <?php echo $option['question_id'] ?>
 
         .この地名はなんて読む？
       </h1>
       <div class="quiz-img-container">
-        <img src="src/img/photo<? echo $prefecture_id ?>.png" alt="選択肢の写真">
+        <img src="img/<?php echo $option['img']; ?>" alt="">
       </div>
-      <ul class="question__lists">
-        <?php shuffle($choices) ?>
-        <?php foreach ($choices as $index => $choice) { ?>
-          <li class="question__list<?php if ($choice['correct'] == 1) {
-                                      echo 1;
-                                    } else {
-                                      echo 0;
-                                    } ?>">
-            <?php echo $choice['name']; ?>
-          </li>
+
+      <ul id="quiz-choices<?php print($option['question_id']) ?>">
+        <li id="choice<?php print($option['question_id']) ?>-<?= $shuffle_num[0] ?>" onclick="clickfunction(<?php print($option['question_id']) ?>,<?= $shuffle_num[0] ?>)"><?= $option["choice$shuffle_num[0]"]; ?></li>
+        <li id="choice<?php print($option['question_id']) ?>-<?= $shuffle_num[1] ?>" onclick="clickfunction(<?php print($option['question_id']) ?>,<?= $shuffle_num[1] ?>)"><?= $option["choice$shuffle_num[1]"]; ?></li>
+        <li id="choice<?php print($option['question_id']) ?>-<?= $shuffle_num[2] ?>" onclick="clickfunction(<?php print($option['question_id']) ?>,<?= $shuffle_num[2] ?>)"><?= $option["choice$shuffle_num[2]"]; ?></li>
       </ul>
-    <?php }; ?>
-
-    <div class="question__answer">
-      <p class="question__answer__text">正解！</p>
-      <p class="question__answer__text__choice">
-        正解は「
-        <?php
-        echo ($corrects[$index]);
-        ?>
-        」です！
-      </p>
-    </div>
-  <?php endforeach; ?>
 
 
-  <!-- jquery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="./timeiquiz.js"></script>
+      <div name="answerBoxDiv" class="answerBoxDiv" id="answerbox-div<?php print($option['question_id']) ?>">
+        <h3 class="quiz-result-title"></h3>
+        <p class="quiz-result-paragraph">
+
+      </div>
+    <?php endforeach; ?>
+
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="./kashiken.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,10 @@
 
 /* "これはなんて読む？"　の下線　 option + command + ↓*/
 
+.question {
+  width: 70%;
+}
+
 .quiz-div {
   /* margin: 10px auto; */
   width: 40%;
@@ -11,9 +15,10 @@
 }
 
 .title {
-  font-size: 17px;
+  text-align: center;
+  /* font-size: 17px; */
   margin: 5vw auto 0;
-  width: 100%;
+  width: 70%;
   text-align: left;
   font-family:'HiraKakuProN-W6';
 }
@@ -33,19 +38,20 @@
 } */
 
 .quiz-img-container img {
-    width: 100%;
+    width: 70%;
     /* height: auto; */
     /* text-align: center; */
 }
 
 ul {
-  width: 100%;
+  width: 70%;
   padding: 0;
   /* margin: 0px auto; */
   list-style: none;
 }
 
 li {
+  width: 60%;
   /* height: 23px; */
   text-align: left;
   font-size: 16px;
@@ -63,7 +69,7 @@ li {
 /* 回答ボックス */
 .answer-box{
   background-color: #f5f5f5;
-  width: 40%;
+  width: 100%;
   padding: 2vw;
   margin: 0 auto;
   border-radius: 3px;
@@ -135,4 +141,9 @@ li {
   font-size: 16px;
   font-family:'HiraKakuProN-W6';
   border-bottom: solid 3px #FD5129;
+}
+
+
+.answerBoxDiv {
+  display: none;
 }
