@@ -27,9 +27,8 @@ echo ($title["name"]);
 $options_stmt = $db->prepare("SELECT * FROM choices WHERE prefecture_id = ?");
 $options_stmt->execute(array($id));
 $options = $options_stmt->fetchAll();
-
-
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 

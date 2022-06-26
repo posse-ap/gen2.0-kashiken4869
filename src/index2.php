@@ -1,6 +1,6 @@
 <?php
-require("./db_connect.php");
-require("./graph.php");
+require("db_connect.php");
+require("graph.php");
 
 if (!isset($_POST['content']) && !isset($_POST['lang']) && !isset($_POST['day']) && !isset($_POST['time'])) {
     $_POST['content'] = "";
@@ -51,8 +51,8 @@ $sum_day_sum = $sum2->fetch();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POSSEアプリ</title>
-    <link rel="stylesheet" href="./css/reset.css">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./reset.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -255,7 +255,7 @@ $sum_day_sum = $sum2->fetch();
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://www.google.com/jsapi"></script>
-    <script src="./js/main.js"></script>
+    <script src="./main.js"></script>
 </body>
 
 </html>
