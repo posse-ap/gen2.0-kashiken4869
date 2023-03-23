@@ -55,7 +55,9 @@ function loaded() {
 
 const form = document.getElementById("modal")
 
-
+$('#datepicker').datepicker({
+    dateFormat: 'yy-mm-dd'
+}).val();
 
 // function form_submit() {
 //     let twitter = document.getElementById('Twitter_comment');
@@ -106,6 +108,38 @@ const form = document.getElementById("modal")
 //         }
 //     }
 
+let content_box = document.querySelectorAll('.content_box');
+let content_labels = document.querySelectorAll('.content_labels');
+content_labels.forEach(function (element, index) {
+    element.addEventListener('click', function () {
+        element.classList.toggle('circle_clicked')
+        content_box[index].classList.toggle('option_clicked')
+    })
+});
+
+let language_box = document.querySelectorAll('.language_box');
+let language_labels = document.querySelectorAll('.language_labels');
+language_labels.forEach(function (element, index) {
+    element.addEventListener('click', function () {
+        element.classList.toggle('circle_clicked')
+        language_box[index].classList.toggle('option_clicked')
+    })
+});
+
+
+let bottom = document.getElementById('submit__form__button');
+
+bottom.addEventListener('click', function () {
+    let loader = document.getElementsByClassName('loader003');
+    let hideleft = document.getElementById('modal_left');
+    let hideright = document.getElementById('modal_right');
+    let hidebottom = document.getElementById('modal_bottom');
+    loader.style.display = "block";
+    setTimeout(loaded, 3000);
+    hideleft.style.display = "none";
+    hideright.style.display = "none";
+    hidebottom.style.display = "none";
+});
 
 
 const formElements = document.forms.contactForm;

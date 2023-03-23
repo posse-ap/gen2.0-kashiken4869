@@ -15,8 +15,9 @@ class CreateStudyContentsTable extends Migration
     {
         Schema::create('study_contents', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('study_content');
+            $table->string('name');
             $table->string('color');
+            $table->boolean('display')->default(1);
             $table->timestamps();
         });
     }

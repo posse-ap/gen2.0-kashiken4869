@@ -15,6 +15,7 @@ class CreateStudyDataTable extends Migration
     {
         Schema::create('study_data', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->datetime('study_date');
             $table->integer('study_language_id');
             $table->integer('study_content_id');

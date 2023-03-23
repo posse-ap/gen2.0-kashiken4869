@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POSSEアプリ</title>
     <link rel="stylesheet" href="./css/reset.css">
-        <link rel="stylesheet" href="{{ asset('webapp.css') }}">
+    <link rel="stylesheet" href="{{ asset('webapp.css') }}">
 
 </head>
 
@@ -27,6 +27,24 @@
         </div>
     </header>
 
+    <div style="text-align: center">
+        @if ($errors->any())
+        <p class="alert alert-danger">
+            @foreach ($errors->all() as $error)
+            {{ $error }}
+            @endforeach を記入してください。
+        </p>
+        @endif
+        @if (session()->has('success'))
+        <p class="alert alert-success">{{ session('success') }}</p>
+        @endif
+        @if (session()->has('fail'))
+        <p class="alert alert-danger">{{ session('fail') }}</p>
+        @endif
+        @if (session()->has('auth_message'))
+        <p class="alert alert-danger">{{ session('auth_message') }}</p>
+        @endif
+    </div>
     <div class="content">
         <section class="content_left">
             <section class="cards">
@@ -49,6 +67,9 @@
 
             <section class="bar_graph">
                 <div id='chart_div' class="graph_bar"></div>
+                <!-- <div class="column_cont">
+                    <canvas id="column" class="column"></canvas>
+                </div> -->
             </section>
 
         </section>
@@ -58,147 +79,112 @@
                 <h2 class="right_title">学習言語</h2>
                 <div id="donutchart" class="donutchart"></div>
                 <div class="lang_kinds">
-                    <p class="lang1">Javascript</p>
-                    <p class="lang2">CSS</p>
-                    <p class="lang3">PHP</p>
-                    <p class="lang4">HTML</p>
-                    <p class="lang5">Laravel</p>
-                    <p class="lang6">SQL</p>
-                    <p class="lang7">SHELL</p>
-                    <p class="lang8">情報システム基礎知識（その他）</p>
+                    @foreach ($all_languages as $language)
+                    <p class="lang1" style="background-color: {{ $language->color }}">{{$language->name}}</p>
+                    @endforeach
                 </div>
             </div>
             <div class="right_content">
                 <h2 class="right_title">学習コンテンツ</h2>
                 <div id="donutchart2" class="donutchart"></div>
                 <div class="contents_kinds">
-                    <p class="one_content1">ドットインストール</p>
-                    <p class="one_content2">N予備校</p>
-                    <p class="one_content3">POSSE課題</p>
+                    @foreach ($all_contents as $content)
+                    <p class="one_content1" style="background-color: {{ $content->color }}">{{$content->name}}</p>
+                    @endforeach
                 </div>
             </div>
         </section>
     </div>
 
     <?php $year = date('Y');
-            $month = date('n');
+    $month = date('n');
     ?>
 
-    <form action="/webapp" method="post" class="page_change">
-        <button id="page_back" class="page_back" onclick="page_back()"></button>
-        <p><span id="year"><?php echo $year; ?></span>年<span class="month"><?php echo $month; ?></span>月</p>
-        <button id="page_front" class="page_front" onclick="page_front()"></button>
-    </form>
-
-
-    <div class="submit__form__footer">
-        <button class="smart_button" onclick="modal_open()">記録・投稿</button>
-    </div>
+    <button id="page_back" class="page_back" onclick="page_back()"></button>
+    <p><span id="year"><?php echo $year; ?></span>年<span class="month"><?php echo $month; ?></span>月</p>
+    <button id="page_front" class="page_front" onclick="page_front()"></button>
 
     <div id="black_shadow" class="black_shadow"></div>
 
-    <form action="/" method="post" name="contactForm" id="modal" class="modal">
-        <button id="cancel_btn" class="cancel" type="button" onclick="cancel()">×</button>
+    <div class="modal" name="contactForm" id="modal">
+        <form action="{{ route('add_record') }}" method="post">
+            @csrf
+            <button id="cancel_btn" class="cancel" type="button" onclick="cancel()">×</button>
 
-        <div class="modal_content">
-            <section class="modal_left">
-                <div class="submit__form__item">
-                    <dt><label for="day" class="modal_title">学習日</label></dt>
-                    <dd><textarea id="day" name="day" class="small_textarea" onclick="calendar_open()" required="required"></textarea></dd>
+            <div class="modal_content">
+                <section class="modal_left">
+                    <div class="submit__form__item">
+                        <h1 class="modal_title">学習日</h1>
+                        <input name="study_date" type="text" class="textbox_small" id="datepicker" required="required">
+                    </div>
+                    <div class="submit__form__item">
+                        <dt class="modal_title">学習コンテンツ（複数選択可）</dt>
+                        <dd class="check_flex">
+                            @foreach ($contents_on_display as $content)
+                            <input type="checkbox" name="content_value[]" value="{{ $content->id }}" id="check{{ $content->id }}" class="check">
+                            <label for="check{{ $content->id }}" class="check_2"></label>
+                            <label for="check{{ $content->id }}" class="check_1">{{ $content->name }}</label>
+                            @endforeach
+                        </dd>
+                    </div>
+                    <div class="submit__form__item">
+                        <dt class="modal_title">学習言語（複数選択可）</dt>
+                        <dd class="check_flex">
+                            @foreach ($languages_on_display as $language)
+                            <input type="checkbox" name="lang_value[]" value="{{ $language->id }}" class="check" id="check{{ $language->id }}">
+                            <label for="check{{ $language->id }}" class="check_2"></label>
+                            <label for="check{{ $language->id }}" class="check_1">{{ $language->name }}</label>
+                            @endforeach
+                        </dd>
+                    </div>
+                </section>
+                <section class="modal_right">
+                    <div class="submit__form__item">
+                        <h1 class="modal_title">学習時間</h1>
+                        <input name="study_time" type="number" step="0.1" class="textbox_small" required="required">
+                    </div>
+                    <div class="submit__form__item">
+                        <dt><label for="Twitter_comment" class="modal_title">Twitter用コメント</label></dt>
+                        <dd><textarea id="Twitter_comment" type="text" name="comment" class="big_textarea"></textarea></dd>
+                    </div>
+                    <input type="checkbox" name="Twitter" value="Twitterに自動投稿する" id="Twitter" class="check">
+                    <label for="Twitter" class="label_parent"></label>
+                    <label for="Twitter" class="label">Twitterに自動投稿する</label>
+                </section>
+
+                <div class="submit__form__footer">
+                    <button id="submit__form__button" class="submit__form__button" type="submit">記録・投稿</button>
                 </div>
-                <div class="submit__form__item">
-                    <dt class="modal_title">学習コンテンツ（複数選択可）</dt>
-                    <dd class="check_flex">
-                        <input type="checkbox" name="content" value="2" id="check0" class="check">
-                        <label for="check0" class="check_2"></label>
-                        <label for="check0" class="check_1">N予備校</label>
-                        <input type="checkbox" name="content" value="1" id="check1" class="check">
-                        <label for="check1" class="check_2"></label>
-                        <label for="check1" class="check_1">ドットインストール</label><br>
-                        <input type="checkbox" name="content" value="3" id="check2" class="check">
-                        <label for="check2" class="check_2"></label>
-                        <label for="check2" class="check_1">POSSE課題</label>
-                    </dd>
-                </div>
-                <div class="submit__form__item">
-                    <dt class="modal_title">学習言語（複数選択可）</dt>
-                    <dd class="check_flex">
-                        <input type="checkbox" name="lang" value="4" id="check3" class="check">
-                        <label for="check3" class="check_2"></label>
-                        <label for="check3" class="check_1">HTML</label>
-                        <input type="checkbox" name="lang" value="2" class="check" id="check4">
-                        <label for="check4" class="check_2"></label>
-                        <label for="check4" class="check_1">CSS</label>
-                        <input type="checkbox" name="lang" value="1" class="check" id="check5">
-                        <label for="check5" class="check_2"></label>
-                        <label for="check5" class="check_1">Javascript</label><br>
-                        <input type="checkbox" name="lang" value="3" class="check" id="check6">
-                        <label for="check6" class="check_2"></label>
-                        <label for="check6" class="check_1">PHP</label>
-                        <input type="checkbox" name="lang" value="5" class="check" id="check7">
-                        <label for="check7" class="check_2"></label>
-                        <label for="check7" class="check_1">Laravel</label>
-                        <input type="checkbox" name="lang" value="6" class="check" id="check8">
-                        <label for="check8" class="check_2"></label>
-                        <label for="check8" class="check_1">SQL</label>
-                        <input type="checkbox" name="lang" value="7" class="check" id="check9">
-                        <label for="check9" class="check_2"></label>
-                        <label for="check9" class="check_1">SHELL</label><br>
-                        <input type="checkbox" name="lang" value="8" class="check" id="check10">
-                        <label for="check10" class="check_2"></label>
-                        <label for="check10" class="check_1">情報システム基礎知識(その他)</label>
-                    </dd>
-                </div>
-            </section>
-            <section class="modal_right">
-                <div class="submit__form__item">
-                    <dt><label for="time" class="modal_title">学習時間</label></dt>
-                    <!-- <dd><textarea id="time" type="number" name="time" class="small_textarea" required="required"></textarea></dd> -->
-                    <dd><input type="number" id="time" name="time" class="small_textarea" required="required"></dd>
-                </div>
-                <div class="submit__form__item">
-                    <dt><label for="Twitter_comment" class="modal_title">Twitter用コメント</label></dt>
-                    <dd><textarea id="Twitter_comment" type="text" name="comment" class="big_textarea"></textarea></dd>
-                </div>
-                <input type="checkbox" name="Twitter" value="Twitterに自動投稿する" id="Twitter" class="check">
-                <label for="Twitter" class="label_parent"></label>
-                <label for="Twitter" class="label">Twitterに自動投稿する</label>
-            </section>
+        </form>
+        <div id="loading" class="loader003"></div>
+        <div id="modal3" class="modal3">
+            <button id="cancel_btn3" class="cancel" onclick="cancel4()">×</button>
+            <h3 class="modal3_title">AWESOME!</h3>
+            <div class="big_check"></div>
+            <div class="modal3_content">
+                記録・投稿<br>
+                完了しました
+            </div>
+
         </div>
 
-        <div class="submit__form__footer">
-            <button class="submit__form__button" type="submit">記録・投稿</button>
-        </div>
-
-    </form>
-
-    <div id="modal2" class="modal2">
-        <!-- <button id="cancel_btn2" class="cancel" onclick="cancel2()">×</button> -->
-        <div id="loading">
-            <div class="loader003"></div>
+        <div id="error" class="error">
+            <h3 class="error_title">ERROR</h3>
+            <div class="exclamation"></div>
+            <div class="error_content">
+                一時的にご利用できない状態です。<br>
+                しばらく経ってから<br>
+                再度アクセスしてください
+            </div>
         </div>
     </div>
 
+    <!-- <div id="modal2" class="modal2"> -->
+    <!-- <button id="cancel_btn2" class="cancel" onclick="cancel2()">×</button> -->
+    <!-- <div id="loading"> -->
+    <!-- </div> -->
+    <!-- </div> -->
 
-    <div id="modal3" class="modal3">
-        <button id="cancel_btn3" class="cancel" onclick="cancel4()">×</button>
-        <h3 class="modal3_title">AWESOME!</h3>
-        <div class="big_check"></div>
-        <div class="modal3_content">
-            記録・投稿<br>
-            完了しました
-        </div>
-    </div>
-
-    <div id="error" class="error">
-        <h3 class="error_title">ERROR</h3>
-        <div class="exclamation"></div>
-        <div class="error_content">
-            一時的にご利用できない状態です。<br>
-            しばらく経ってから<br>
-            再度アクセスしてください
-        </div>
-    </div>
 
     <div id="calendar_modal" class="calendar_modal">
         <button id="cancel_btn4" class="arrow_left day_cancel" onclick="cancel3()"></button>
@@ -219,297 +205,307 @@
     <script src="https://www.google.com/jsapi"></script>
 
     <script>
-    var dataset = [
-        ["date", "time"],
-        <?php
-        foreach ($bars as $bar) {
-        ?>['<?= substr($bar->study_date, 8, 2) ?>', <?= $bar->sum ?>],
-        <?php
-        }
-        ?>
-    ]
-    // 1. 変数mqlにMediaQueryListを格納
-    const mql = window.matchMedia('(min-width: 424px)');
-
-    // 2. メディアクエリに応じて実行したい処理を関数として定義
-    const handleMediaQuery = function(mql) {
-        if (mql.matches) {
-            // 424px以上の場合の処理
-            google.charts.load("current", {
-        packages: ["corechart"]
-    });
-    google.load("visualization", "1", {
-        packages: ["corechart"]
-    });
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
+        var dataset = [
+            ["date", "time"],
             <?php
-            foreach ($languages as $language) {
-            ?>['<?= $language->study_language ?>', <?= $language->sum ?>],
+            foreach ($bars as $bar) {
+            ?>['<?= substr($bar->study_date, 8, 2) ?>', <?= $bar->sum ?>],
             <?php
             }
             ?>
-        ]);
+        ]
+        // 1. 変数mqlにMediaQueryListを格納
+        const mql = window.matchMedia('(min-width: 424px)');
 
-        var data2 = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
-            <?php
-            foreach ($contents as $content) {
-            ?>['<?= $content->study_content ?>', <?= $content->sum ?>],
-            <?php
+        // 2. メディアクエリに応じて実行したい処理を関数として定義
+        const handleMediaQuery = function(mql) {
+            if (mql.matches) {
+                // 424px以上の場合の処理
+                google.charts.load("current", {
+                    packages: ["corechart"]
+                });
+                google.load("visualization", "1", {
+                    packages: ["corechart"]
+                });
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Task', 'Hours per Day'],
+                        <?php
+                        foreach ($languages as $language) {
+                        ?>['<?= $language->study_language ?>', <?= $language->sum ?>],
+                        <?php
+                        }
+                        ?>
+                    ]);
+
+                    var data2 = google.visualization.arrayToDataTable([
+                        ['Task', 'Hours per Day'],
+                        <?php
+                        foreach ($contents as $content) {
+                        ?>['<?= $content->study_content ?>', <?= $content->sum ?>],
+                        <?php
+                        }
+                        ?>
+                    ]);
+
+                    var options = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        pieHole: 0.4,
+                        colors: [
+                            <?php
+                            foreach ($languages as $language) {
+                            ?> '<?= $language->color ?>',
+                            <?php
+                            }
+                            ?>
+                        ],
+                        chartArea: {
+                            left: 3,
+                            right: 3,
+                            top: 0,
+                            width: '90%',
+                            height: '90%'
+                        },
+                        pieSliceBorderColor: 'none',
+                        legend: {
+                            position: 'none'
+                        },
+                    };
+                    var options2 = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        pieHole: 0.4,
+                        colors: [
+                            <?php
+                            foreach ($contents as $content) {
+                            ?> '<?= $content->color ?>',
+                            <?php
+                            }
+                            ?>
+                        ],
+                        chartArea: {
+                            left: 3,
+                            right: 3,
+                            top: 0,
+                            width: '90%',
+                            height: '90%'
+                        },
+                        pieSliceBorderColor: 'none',
+                        legend: {
+                            position: 'none'
+                        }
+                    };
+
+                    var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+                    chart.draw(data, options);
+
+                    var chart2 = new google.visualization.PieChart(document.getElementById('donutchart2'));
+                    chart2.draw(data2, options2);
+
+                    var data3 = google.visualization.arrayToDataTable(dataset);
+                    var options3 = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        hAxis: {
+                            textStyle: {
+                                color: '#C0D4E3',
+                            },
+                            ticks: [2, 4, 6, 8, 10, 15, 20],
+                            showTextEvery: 2,
+                        },
+                        vAxis: {
+                            format: `#h`,
+                            textStyle: {
+                                color: '#C0D4E3',
+                                fontSize: 13
+                            },
+                            gridlines: {
+                                color: "transparent"
+                            },
+                            baselineColor: 'transparent',
+                            showTextEvery: 2,
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 20 //値の最大表示数
+                            }
+                        },
+                        bar: {
+                            groupWidth: "55%"
+                        },
+                        chartArea: {
+                            width: '90%',
+                            height: '90%'
+                        },
+                        legend: {
+                            position: 'none'
+                        },
+                    };
+                    var chart3 = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                    chart3.draw(data3, options3);
+                }
+            } else {
+                // 424px未満の場合の処理
+                google.charts.load("current", {
+                    packages: ["corechart"]
+                });
+                google.load("visualization", "1", {
+                    packages: ["corechart"]
+                });
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Task', 'Hours per Day'],
+                        <?php
+                        foreach ($languages as $language) {
+                        ?>['<?= $language->study_language ?>', <?= $language->sum ?>],
+                        <?php
+                        }
+                        ?>
+                    ]);
+
+                    var data2 = google.visualization.arrayToDataTable([
+                        ['Task', 'Hours per Day'],
+                        <?php
+                        foreach ($contents as $content) {
+                        ?>['<?= $content->study_content ?>', <?= $content->sum ?>],
+                        <?php
+                        }
+                        ?>
+                    ]);
+
+                    var options = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        pieHole: 0.4,
+                        colors: [
+                            <?php
+                            foreach ($languages as $language) {
+                            ?> '<?= $language->color ?>',
+                            <?php
+                            }
+                            ?>
+                        ],
+                        chartArea: {
+                            // left: 10,
+                            // right: 10,
+                            top: 0,
+                            width: '90%',
+                            height: '90%'
+                        },
+                        pieSliceBorderColor: 'none',
+                        legend: {
+                            position: 'none'
+                        },
+                        width: 150,
+                        height: 150,
+                    };
+                    var options2 = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        pieHole: 0.4,
+                        colors: [
+                            <?php
+                            foreach ($contents as $content) {
+                            ?> '<?= $content->color ?>',
+                            <?php
+                            }
+                            ?>
+                        ],
+                        chartArea: {
+                            // left: 10,
+                            // right: 10,
+                            top: 0,
+                            width: '90%',
+                            height: '90%'
+                        },
+                        pieSliceBorderColor: 'none',
+                        legend: {
+                            position: 'none'
+                        },
+                        width: 150,
+                        height: 150,
+                    };
+
+                    var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+                    chart.draw(data, options);
+
+                    var chart2 = new google.visualization.PieChart(document.getElementById('donutchart2'));
+                    chart2.draw(data2, options2);
+
+                    var data3 = google.visualization.arrayToDataTable(dataset);
+                    var options3 = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        hAxis: {
+                            textStyle: {
+                                color: '#C0D4E3',
+                            },
+                            ticks: [2, 4, 6, 8, 10, 15, 20],
+                            showTextEvery: 2,
+                        },
+                        vAxis: {
+                            format: `#h`,
+                            textStyle: {
+                                color: '#C0D4E3',
+                                fontSize: 13
+                            },
+                            gridlines: {
+                                color: "transparent"
+                            },
+                            baselineColor: 'transparent',
+                            showTextEvery: 2,
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 20 //値の最大表示数
+                            }
+                        },
+                        bar: {
+                            groupWidth: "55%"
+                        },
+                        chartArea: {
+                            width: '90%',
+                            height: '90%'
+                        },
+                        legend: {
+                            position: 'none'
+                        },
+                        height: 150,
+                    };
+                    var chart3 = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                    chart3.draw(data3, options3);
+                }
             }
-            ?>
-        ]);
-
-        var options = {
-            responsive: true,
-            maintainAspectRatio: false,
-            pieHole: 0.4,
-            colors: [
-                <?php
-                foreach ($languages as $language) {
-                ?> '<?= $language->color ?>',
-                <?php
-                }
-                ?>
-            ],
-            chartArea: {
-                left: 3,
-                right: 3,
-                top: 0,
-                width: '90%',
-                height: '90%'
-            },
-            pieSliceBorderColor: 'none',
-            legend: {
-                position: 'none'
-            },
-        };
-        var options2 = {
-            responsive: true,
-            maintainAspectRatio: false,
-            pieHole: 0.4,
-            colors: [
-                <?php
-                foreach ($contents as $content) {
-                ?> '<?= $content->color ?>',
-                <?php
-                }
-                ?>
-            ],
-            chartArea: {
-                left: 3,
-                right: 3,
-                top: 0,
-                width: '90%',
-                height: '90%'
-            },
-            pieSliceBorderColor: 'none',
-            legend: {
-                position: 'none'
-            }
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-        chart.draw(data, options);
+        // 3. イベントリスナーを追加（メディアクエリの条件一致を監視）
+        mql.addListener(handleMediaQuery);
 
-        var chart2 = new google.visualization.PieChart(document.getElementById('donutchart2'));
-        chart2.draw(data2, options2);
+        // 4. 初回チェックのため関数を一度実行
+        handleMediaQuery(mql);
+    </script>
 
-        var data3 = google.visualization.arrayToDataTable(dataset);
-        var options3 = {
-            responsive: true,
-            maintainAspectRatio: false,
-            hAxis: {
-                textStyle: {
-                    color: '#C0D4E3',
-                },
-                ticks: [2, 4, 6, 8, 10, 15, 20],
-                showTextEvery: 2,
-            },
-            vAxis: {
-                format: `#h`,
-                textStyle: {
-                    color: '#C0D4E3',
-                    fontSize: 13
-                },
-                gridlines: {
-                    color: "transparent"
-                },
-                baselineColor: 'transparent',
-                showTextEvery: 2,
-                ticks: {
-                    autoSkip: true,
-                    maxTicksLimit: 20 //値の最大表示数
-                }
-            },
-            bar: {
-                groupWidth: "55%"
-            },
-            chartArea: {
-                width: '90%',
-                height: '90%'
-            },
-            legend: {
-                position: 'none'
-            },
-        };
-        var chart3 = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart3.draw(data3, options3);
-    }
-        } else {
-            // 424px未満の場合の処理
-            google.charts.load("current", {
-        packages: ["corechart"]
-    });
-    google.load("visualization", "1", {
-        packages: ["corechart"]
-    });
-    google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
-            <?php
-            foreach ($languages as $language) {
-            ?>['<?= $language->study_language ?>', <?= $language->sum ?>],
-            <?php
-            }
-            ?>
-        ]);
-
-        var data2 = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
-            <?php
-            foreach ($contents as $content) {
-            ?>['<?= $content->study_content ?>', <?= $content->sum ?>],
-            <?php
-            }
-            ?>
-        ]);
-
-        var options = {
-            responsive: true,
-            maintainAspectRatio: false,
-            pieHole: 0.4,
-            colors: [
-                <?php
-                foreach ($languages as $language) {
-                ?> '<?= $language->color ?>',
-                <?php
-                }
-                ?>
-            ],
-            chartArea: {
-                // left: 10,
-                // right: 10,
-                top: 0,
-                width: '90%',
-                height: '90%'
-            },
-            pieSliceBorderColor: 'none',
-            legend: {
-                position: 'none'
-            },
-            width: 150,
-            height: 150,
-        };
-        var options2 = {
-            responsive: true,
-            maintainAspectRatio: false,
-            pieHole: 0.4,
-            colors: [
-                <?php
-                foreach ($contents as $content) {
-                ?> '<?= $content->color ?>',
-                <?php
-                }
-                ?>
-            ],
-            chartArea: {
-                // left: 10,
-                // right: 10,
-                top: 0,
-                width: '90%',
-                height: '90%'
-            },
-            pieSliceBorderColor: 'none',
-            legend: {
-                position: 'none'
-            },
-            width: 150,
-            height: 150,
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-        chart.draw(data, options);
-
-        var chart2 = new google.visualization.PieChart(document.getElementById('donutchart2'));
-        chart2.draw(data2, options2);
-
-        var data3 = google.visualization.arrayToDataTable(dataset);
-        var options3 = {
-            responsive: true,
-            maintainAspectRatio: false,
-            hAxis: {
-                textStyle: {
-                    color: '#C0D4E3',
-                },
-                ticks: [2, 4, 6, 8, 10, 15, 20],
-                showTextEvery: 2,
-            },
-            vAxis: {
-                format: `#h`,
-                textStyle: {
-                    color: '#C0D4E3',
-                    fontSize: 13
-                },
-                gridlines: {
-                    color: "transparent"
-                },
-                baselineColor: 'transparent',
-                showTextEvery: 2,
-                ticks: {
-                    autoSkip: true,
-                    maxTicksLimit: 20 //値の最大表示数
-                }
-            },
-            bar: {
-                groupWidth: "55%"
-            },
-            chartArea: {
-                width: '90%',
-                height: '90%'
-            },
-            legend: {
-                position: 'none'
-            },
-            height: 150,
-        };
-        var chart3 = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart3.draw(data3, options3);
-    }
-        }
-    };
-
-    // 3. イベントリスナーを追加（メディアクエリの条件一致を監視）
-    mql.addListener(handleMediaQuery);
-
-    // 4. 初回チェックのため関数を一度実行
-    handleMediaQuery(mql);
-
-</script>
-
-    
     <script src="{{ asset('webapp.js') }}"></script>
 </body>
 
+@section('body_scripts')
+<script>
+    // js にコントローラで定義したブレード変数を渡している
+    const bar_data = @json($bar);
+    const langs_data = @json($langs);
+    const langs_labels = @json($langs_labels);
+    const langs_colours = @json($langs_colours);
+    const contents_data = @json($contents);
+    const contents_labels = @json($contents_labels);
+    const contents_colours = @json($contents_colours);
+    const month = @json($month);
+</script>
+<script src="webapp.js"></script>
+<script src="graphs.js"></script>
+@endsection
+
 </html>
-
-
-
-
-    

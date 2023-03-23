@@ -15,8 +15,9 @@ class CreateStudyLanguagesTable extends Migration
     {
         Schema::create('study_languages', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('study_language');
+            $table->string('name');
             $table->string('color');
+            $table->boolean('display')->default(1);
             $table->timestamps();
         });
     }
