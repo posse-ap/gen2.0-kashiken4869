@@ -9,8 +9,9 @@ class QuizController extends Controller
 {
     public function index()
     {
+        $big_questions = BigQuestion::all();
         $questions = Question::all();
-        return view('user.quiz.index', compact('questions'));
+        return view('user.quiz.index', compact('questions', 'big_questions'));
     }
 
     public function detail($id)
